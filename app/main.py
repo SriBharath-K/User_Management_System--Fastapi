@@ -27,6 +27,6 @@ app.include_router(user_router)
 
 @app.get("/login")
 def home(username:str=Depends(current_user)):
-    return {"message": "Welcome to fastapi Customer App!"}
+    return {"message": "Welcome, Authenticated Successfullty"}
 
 

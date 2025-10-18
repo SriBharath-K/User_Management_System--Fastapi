@@ -21,5 +21,5 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     user = get_user_by_username(db, form_data.username)
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    token = create_access_token(data={"sub": user.username})
+    token = create_access_token(data={"sub": user.username,"role": user.role})
     return {"access_token": token, "token_type": "bearer"}

@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from app.schemas.orders import orderCreate, orderOut,orderUpdate
 from app.crud import orders
 from app.db.database import get_db
+from app.schemas.users import TokenData
+from app.auth.auth_bearer import require_role
 
 router=APIRouter(
     prefix="/app/orders",
@@ -10,7 +12,7 @@ router=APIRouter(
 )
 
 @router.post("/create",response_model=orderOut)
-def createorder(order:orderCreate,db:Session=Depends(get_db)):
+def createorder(order:orderCreate,db:Session=Depends(get_db),user: TokenData = Depends(require_role("admin"))):
     return orders.CreateOrder(db,order)
 
 @router.get("/get_order/{orderid}",response_model=orderOut)
@@ -22,9 +24,9 @@ def getorders(skip:int,limit:int,db:Session=Depends(get_db)):
     return orders.GetOrders(db,skip,limit)
 
 @router.delete("/delete/{orderid}",response_model=orderOut)
-def deleteorder(orderid:int,db:Session=Depends(get_db)):
+def deleteorder(orderid:int,db:Session=Depends(get_db),user: TokenData = Depends(require_role("admin"))):
     return orders.DeleteOrder(db,orderid)
 
 @router.put("/update/{orderid}",response_model=orderOut)
-def updateorder(orderid:int,order:orderUpdate,db:Session=Depends(get_db)):
+def updateorder(orderid:int,order:orderUpdate,db:Session=Depends(get_db),user: TokenData = Depends(require_role("admin"))):
     return orders.UpdateOrder(db,orderid,order)

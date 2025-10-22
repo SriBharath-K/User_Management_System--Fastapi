@@ -5,5 +5,5 @@ class Orders(BASE):
     __tablename__="orders"
 
     id=Column(Integer,primary_key=True,index=True)
-    name=Column(String,nullable=False)
+    name=Column(String(255),nullable=False)
     quantity=Column(Integer,nullable=False)
